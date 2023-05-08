@@ -1,4 +1,4 @@
-# IPFSRootCIDExplorer
+# IPFS Root CID Explorer
 
 This is a simple frontend example for exploring all the child files contained within an IPFS Root CID and presenting each child file's full CID as a list. It uses jQuery and the IPFS gateway API to fetch the content of the Root CID and enumerate all the child files to present each child file's full CID as a list.
 
