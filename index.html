@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>IPFS Root CID Explorer</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<style>
+		.cid-list {
+			margin: 10px 0;
+			padding: 0;
+			list-style: none;
+		}
+		.cid-item {
+			margin: 5px 0;
+			padding: 5px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			font-family: monospace;
+			font-size: 12px;
+		}
+		.cid-filename {
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+	<h1>IPFS Root CID Explorer</h1>
+	<form>
+		<label for="rootCID">Enter IPFS Root CID:</label>
+		<input type="text" id="rootCID" name="rootCID"><br><br>
+		<button type="button" onclick="exploreRootCID()">Explore Root CID</button>
+	</form>
+	<ul id="cidList" class="cid-list"></ul>
+	<script>
+		function exploreRootCID() {
+			var rootCID = document.getElementById("rootCID").value;
+			var url = "https://ipfs.io/ipfs/" + rootCID + "/";
+
+			$.ajax({
+				url: url,
+				success: function(data) {
+					var cidList = $("#cidList").empty();
+					var files = {};
+					$(data).find("a").each(function() {
+						var cid = $(this).attr("href");
+						if (cid !== "../" && cid !== "index.html") {
+							if (!(cid in files)) {
+								files[cid] = rootCID + '/' + cid;
+							}
+						}
+					});
+					for (var cid in files) {
+						if (files.hasOwnProperty(cid)) {
+							var cidItem = '<li class="cid-item"><span class="cid-filename">' + cid + '</span>: ' + files[cid] + '</li>';
+							cidList.append(cidItem);
+						}
+					}
+				}
+			});
+		}
+	</script>
+</body>
+</html>
